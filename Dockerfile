@@ -31,10 +31,11 @@ RUN apt-get update && apt-get install -y \
 # Enable Apache mod_rewrite and headers
 RUN a2enmod rewrite headers
 
-# Configure Apache DocumentRoot to Laravel's public directory
+# Configure Apache DocumentRoot to Laravel's public directory and allow .htaccess overrides
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
 # Configure PHP settings
 RUN echo "memory_limit=256M" > /usr/local/etc/php/conf.d/memory-limit.ini \
