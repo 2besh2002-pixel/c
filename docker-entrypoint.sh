@@ -19,6 +19,9 @@ if [ -n "$DB_HOST" ] && [ "$DB_HOST" != "127.0.0.1" ]; then
     php artisan migrate --force --no-interaction || echo "Migration notice: Database connection or tables skipped for now."
 fi
 
-# Start Laravel
-echo "Starting Laravel server on port ${PORT:-8080}..."
-exec php -d variables_order=EGPCS artisan serve --host=0.0.0.0 --port="${PORT:-8080}"
+# Set server port (Render provides $PORT, fallback to 10000 or 8080)
+APP_PORT="${PORT:-10000}"
+
+# Start PHP built-in production server directly on the public directory
+echo "Starting production web server on port $APP_PORT..."
+exec php -d variables_order=EGPCS -S 0.0.0.0:"$APP_PORT" -t public public/index.php
