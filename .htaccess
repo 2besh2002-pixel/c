@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # If the request already points inside public/ — leave it alone
+    RewriteCond %{REQUEST_URI} !^/public/
+
+    # If the request is for a real file or directory that exists — leave it alone
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Otherwise forward to public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
