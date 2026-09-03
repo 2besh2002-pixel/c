@@ -12,501 +12,1623 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <style>
-        input[type="date"],
-        .en-numbers,
-        .date-input {
-            direction: ltr !important;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-            font-feature-settings: "numr" 0, "tnum" 1;
-        }
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+            --animate-fade-slide: fadeSlideIn 0.4s ease;
 
-        input[type="date"] {
-            -webkit-locale: "en-US";
-            calendar: gregory;
-        }
+            @keyframes fadeSlideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(12px);
+                }
 
-        input[type="date"]::-webkit-datetime-edit {
-            direction: ltr !important;
-        }
-
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            cursor: pointer;
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         }
     </style>
 </head>
 
-<body class="min-h-screen bg-emerald-50/40 font-sans text-emerald-950">
-    <main class="mx-auto w-full max-w-7xl space-y-5 px-4 py-5 sm:px-6 lg:px-8">
+<body class="min-h-screen bg-gradient-to-bl from-emerald-50 via-white to-emerald-50/40 font-['Cairo',sans-serif]">
+    <main class="mx-auto w-full max-w-5xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
 
-        <!-- Header & Contract Details Section -->
-        <section class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
-            <header
-                class="border-b border-emerald-100 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 px-4 py-4 sm:px-6 sm:py-5">
-                <div class="flex flex-col-reverse items-stretch justify-end gap-4 md:flex-row md:justify-between">
-                    <!-- Logo -->
-                    <div class="flex h-16 w-36 shrink-0 items-center justify-center sm:h-20 sm:w-48">
-                        <img class="h-full w-36 object-contain" src="{{ asset('images/new-logo1.png') }}"
-                            alt="أمر تم">
-                    </div>
+        <!-- STEP INDICATOR -->
+        <section
+            class="print:hidden overflow-hidden rounded-2xl border border-emerald-200 bg-white px-6 py-5 shadow-sm">
+            <div class="flex items-center justify-center">
+                <div class="flex items-center">
+                    <div id="step1Dot" data-state="active"
+                        class="step-dot grid h-10 w-10 place-items-center rounded-full border-2 text-sm font-bold
+                               border-emerald-200 bg-emerald-50 text-emerald-400
+                               data-[state=active]:border-emerald-300 data-[state=active]:bg-emerald-100
+                               data-[state=active]:text-emerald-700 data-[state=active]:shadow-[0_0_0_4px_rgba(4,120,87,0.2)]
+                               data-[state=done]:bg-emerald-700 data-[state=done]:text-white data-[state=done]:border-emerald-700">
+                        1</div>
+                    <span class="mr-2 text-sm font-bold text-emerald-800 hidden sm:inline">بيانات العقد</span>
+                </div>
+                <div id="line1" data-state="pending"
+                    class="step-line mx-3 h-0.5 w-10 sm:w-16 lg:w-24 bg-emerald-200 data-[state=done]:bg-emerald-700">
+                </div>
+                <div class="flex items-center">
+                    <div id="step2Dot" data-state="pending"
+                        class="step-dot grid h-10 w-10 place-items-center rounded-full border-2 text-sm font-bold
+                               border-emerald-200 bg-emerald-50 text-emerald-400
+                               data-[state=active]:border-emerald-300 data-[state=active]:bg-emerald-100
+                               data-[state=active]:text-emerald-700 data-[state=active]:shadow-[0_0_0_4px_rgba(4,120,87,0.2)]
+                               data-[state=done]:bg-emerald-700 data-[state=done]:text-white data-[state=done]:border-emerald-700">
+                        2</div>
+                    <span class="mr-2 text-sm font-bold text-emerald-400 hidden sm:inline">معاينة العقد</span>
+                </div>
+                <div id="line2" data-state="pending"
+                    class="step-line mx-3 h-0.5 w-10 sm:w-16 lg:w-24 bg-emerald-200 data-[state=done]:bg-emerald-700">
+                </div>
+                <div class="flex items-center">
+                    <div id="step3Dot" data-state="pending"
+                        class="step-dot grid h-10 w-10 place-items-center rounded-full border-2 text-sm font-bold
+                               border-emerald-200 bg-emerald-50 text-emerald-400
+                               data-[state=active]:border-emerald-300 data-[state=active]:bg-emerald-100
+                               data-[state=active]:text-emerald-700 data-[state=active]:shadow-[0_0_0_4px_rgba(4,120,87,0.2)]
+                               data-[state=done]:bg-emerald-700 data-[state=done]:text-white data-[state=done]:border-emerald-700">
+                        3</div>
+                    <span class="mr-2 text-sm font-bold text-emerald-400 hidden sm:inline">إنشاء العقد</span>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Contract Details Box -->
-                    <div
-                        class="flex w-full justify-center items-center rounded-xl border border-emerald-200 bg-emerald-50/60 p-2.5 shadow-sm sm:gap-2.5 sm:p-3 md:h-full">
-                        <div class="flex justify-center align-center flex-wrap items-center gap-5">
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[11px] font-bold text-emerald-700 whitespace-nowrap">نوع العقد</span>
-                                <select id="contract_type_id" name="contract_type_id"
-                                    class="w-24 sm:w-28 rounded-lg border border-emerald-200 bg-white px-2 py-1.5 text-xs font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400">
-                                    <option value="1" data-price="5000">سنوي</option>
-                                </select>
+        <!-- STEP 1: Contract Info + First Party + Contract Type -->
+        <section id="step1" data-state="active"
+            class="contract-step hidden data-[state=active]:block data-[state=active]:animate-[var(--animate-fade-slide)] space-y-5">
+            <div
+                class="flex flex-col items-center gap-4 rounded-2xl border border-emerald-200 bg-white px-6 py-8 text-center shadow-sm">
+                <img src="{{ asset('images/new-logo1.png') }}" alt="أمر تم" class="h-20 w-auto object-contain">
+                <div>
+                    <h1 class="text-2xl font-black text-emerald-950">إنشاء عقد جديد</h1>
+                    <p class="mt-1 text-sm text-emerald-600">اختر نوع العقد وتعبئة بيانات الطرف الأول لإنشاء العقد</p>
+                </div>
+            </div>
+
+            <!-- Contract Type Selection (Scrollable) -->
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-6">
+                <h2 class="mb-4 flex items-center gap-2 text-lg font-extrabold text-emerald-900">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-emerald-100 text-xs text-emerald-700"><i
+                            class="fa fa-file-contract"></i></span>
+                    نوع العقد والسعر
+                    <span
+                        class="mr-auto inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-bold text-emerald-700"><i
+                            class="fa fa-arrows-up-down text-[9px]"></i> تمرير للاختيار</span>
+                </h2>
+                <div id="contractTypes"
+                    class="max-h-96 space-y-3 overflow-y-auto rounded-xl border border-emerald-100 bg-emerald-50/40 p-3
+                           [&::-webkit-scrollbar]:w-2
+                           [&::-webkit-scrollbar-track]:bg-emerald-100 [&::-webkit-scrollbar-track]:rounded-lg
+                           [&::-webkit-scrollbar-thumb]:bg-emerald-600 [&::-webkit-scrollbar-thumb]:rounded-lg
+                           hover:[&::-webkit-scrollbar-thumb]:bg-emerald-700">
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="1" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-700"><i
+                                    class="fa fa-bolt text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد خدمات فورية</h3>
+                                <p class="truncate text-xs text-emerald-600">خدمات محددة ومحدودة حسب الطلب</p>
                             </div>
-
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[11px] font-bold text-emerald-700 whitespace-nowrap">المدة
-                                    (السنوات)</span>
-                                <input id="duration_years" name="duration_years" type="number" value="1"
-                                    min="1" readonly lang="en-US" dir="ltr"
-                                    class="en-numbers w-16 sm:w-20 rounded-lg border border-emerald-200 bg-emerald-100/70 px-2 py-1.5 text-center text-xs font-extrabold text-emerald-900 outline-none [direction:ltr]">
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[11px] font-bold text-emerald-700 whitespace-nowrap">بداية
-                                    العقد</span>
-                                <input id="start_date" name="start_date" type="date" lang="en-US" dir="ltr"
-                                    data-calendar="gregory" value="2026-09-01" required
-                                    class="date-input en-numbers w-32 sm:w-34 rounded-lg border border-emerald-200 bg-white px-2 py-1.5 text-center text-xs font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400 [direction:ltr]">
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[11px] font-bold text-emerald-700 whitespace-nowrap">نهاية
-                                    العقد</span>
-                                <input id="end_date" name="end_date" type="date" lang="en-US" dir="ltr"
-                                    data-calendar="gregory" value="2027-09-01" required
-                                    class="date-input en-numbers w-32 sm:w-34 rounded-lg border border-emerald-200 bg-white px-2 py-1.5 text-center text-xs font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400 [direction:ltr]">
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <span class="text-[11px] font-bold text-emerald-700 whitespace-nowrap">رقم العقد</span>
-                                <input id="contract_number" type="text" lang="en-US" dir="ltr"
-                                    value="CNT-0001" readonly
-                                    class="en-numbers w-28 sm:w-32 rounded-lg border border-emerald-200 bg-emerald-100/70 px-2 py-1.5 text-center text-xs font-extrabold text-emerald-900 outline-none [direction:ltr]">
-                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">2,999 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
                         </div>
                     </div>
 
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="2" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-amber-50 text-amber-700"><i
+                                    class="fa fa-calendar-check text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد خدمات آمر تم السنوي</h3>
+                                <p class="truncate text-xs text-emerald-600">اشتراك سنوي متكامل للخدمات التجارية
+                                    والإدارية</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">4,999 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="3" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-700"><i
+                                    class="fa fa-laptop text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد الاشتراكات في المنصة</h3>
+                                <p class="truncate text-xs text-emerald-600">اشتراك منصات رقمية وخدمات تقنية</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">1,499 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="4" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-purple-50 text-purple-700"><i
+                                    class="fa fa-handshake text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد الوساطة</h3>
+                                <p class="truncate text-xs text-emerald-600">وساطة تجارية وتمثيل في التفاوض</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">3,499 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="5" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-orange-50 text-orange-700"><i
+                                    class="fa fa-truck-fast text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد التوريد</h3>
+                                <p class="truncate text-xs text-emerald-600">توريد التجهيزات والمواد واللوازم</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">8,999 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="6" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-sky-50 text-sky-700"><i
+                                    class="fa fa-screwdriver-wrench text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد الصيانة والتشغيل</h3>
+                                <p class="truncate text-xs text-emerald-600">صيانة وقائية وتصحيحية وتشغيل فني</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">6,499 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="type-card group flex items-center justify-between gap-4 rounded-xl border-2 border-transparent bg-white p-4
+                                transition hover:border-emerald-700 hover:shadow-[0_4px_20px_rgba(4,120,87,0.15)]
+                                data-[state=selected]:border-emerald-700 data-[state=selected]:bg-emerald-700/5
+                                data-[state=selected]:shadow-[0_4px_20px_rgba(4,120,87,0.2)]"
+                        data-type="7" data-state="unselected" onclick="selectContractType(this)">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span
+                                class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-rose-50 text-rose-700"><i
+                                    class="fa fa-chart-line text-lg"></i></span>
+                            <div class="min-w-0">
+                                <h3 class="text-sm font-extrabold text-emerald-900">عقد الاستشارات الإدارية</h3>
+                                <p class="truncate text-xs text-emerald-600">استشارات إدارية وحوكمة وتخطيط</p>
+                            </div>
+                        </div>
+                        <div class="flex shrink-0 items-center gap-3">
+                            <span class="text-sm font-black text-emerald-900">5,499 <span
+                                    class="text-[10px] font-bold text-emerald-600">ريال</span></span>
+                            <span
+                                class="type-check grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white
+                                       opacity-0 scale-50 transition-all duration-200
+                                       group-data-[state=selected]:opacity-100 group-data-[state=selected]:scale-100"><i
+                                    class="fa fa-check"></i></span>
+                        </div>
+                    </div>
                 </div>
-            </header>
+                <p id="typeError" class="mt-3 hidden text-center text-xs font-bold text-red-500">يرجى اختيار نوع العقد
+                </p>
+            </div>
+
+            <!-- Contract Details -->
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-6">
+                <h2 class="mb-4 flex items-center gap-2 text-lg font-extrabold text-emerald-900">
+                    <span class="grid h-7 w-7 place-items-center rounded-lg bg-emerald-700 text-xs text-emerald-750"><i
+                            class="fa fa-info-circle"></i></span>
+                    تفاصيل العقد
+                </h2>
+                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs font-bold text-emerald-700">رقم العقد</span>
+                        <input id="contract_number" type="text" value="CNT-0001" readonly
+                            class="[direction:ltr] text-center [font-variant-numeric:tabular-nums] rounded-lg border border-emerald-200 bg-emerald-50/70 px-3 py-2.5 text-sm font-extrabold text-emerald-900 outline-none">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs font-bold text-emerald-700">بداية العقد</span>
+                        <input id="start_date" type="date" lang="en-US" dir="ltr" value="2026-09-01"
+                            required
+                            class="[direction:ltr] text-center [font-variant-numeric:tabular-nums] rounded-lg border border-emerald-200 bg-white px-3 py-2.5 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs font-bold text-emerald-700">نهاية العقد</span>
+                        <input id="end_date" type="date" lang="en-US" dir="ltr" value="2027-09-01"
+                            required
+                            class="[direction:ltr] text-center [font-variant-numeric:tabular-nums] rounded-lg border border-emerald-200 bg-white px-3 py-2.5 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400">
+                    </div>
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs font-bold text-emerald-700">المدة (سنوات)</span>
+                        <input id="duration_years" type="number" value="1" min="1" readonly
+                            lang="en-US" dir="ltr"
+                            class="[direction:ltr] text-center [font-variant-numeric:tabular-nums] rounded-lg border border-emerald-200 bg-emerald-50/70 px-3 py-2.5 text-sm font-extrabold text-emerald-900 outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- First Party (Service Provider) - Editable -->
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                <header
+                    class="flex items-center gap-3 border-b-2 border-emerald-900 bg-gradient-to-l from-emerald-800 to-emerald-700 px-6 py-4">
+                    <span class="grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-sm text-white"><i
+                            class="fa fa-building"></i></span>
+                    <div>
+                        <h3 class="text-base font-extrabold text-white">الطرف الثاني — المستفيد</h3>
+                        <p class="text-[11px] text-emerald-200">قم بتعديل بيانات المنشأة المستفيدة من للخدمة</p>
+                    </div>
+                </header>
+                <div class="grid gap-4 p-5 sm:grid-cols-2">
+                    <div class="flex flex-col gap-1.5 sm:col-span-2">
+                        <span class="text-xs font-bold text-emerald-700">اسم المنشأة <span
+                                class="text-red-500">*</span></span>
+                        <input id="party1_name" type="text" value="مؤسسةآفاق"
+                            class="rounded-lg border border-emerald-200 bg-white px-3 py-2.5 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400">
+                    </div>
+                    <div class="flex flex-col gap-1.5 sm:col-span-2">
+                        <span class="text-xs font-bold text-emerald-700">البريد الالكتروني<span
+                                class="text-red-500">*</span></span>
+                        <input id="party1_email" type="text" value="info@example.com"
+                            class="rounded-lg border border-emerald-200 bg-white px-3 py-2.5 text-sm font-semibold text-emerald-950 outline-none transition focus:border-emerald-500 focus:ring-1 focus:ring-emerald-400">
+                    </div>
+                </div>
+            </div>
+
+            <div class="print:hidden flex justify-end">
+                <button id="btnPreview" onclick="goToStep(2)"
+                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800 hover:shadow-xl">
+                    <span>معاينة العقد</span>
+                    <i class="fa fa-arrow-left text-xs"></i>
+                </button>
+            </div>
         </section>
 
-        <!-- Contract Main Banner & Parties Section -->
-        <section class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
-            <header
-                class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-950 via-emerald-900 to-emerald-800 px-5 py-4 sm:px-7">
-                <div>
-                    <h2 class="text-xl font-extrabold text-white">عقد <span id="contract_type_display">سنوي</span>
-                        إلكتروني</h2>
-                </div>
-            </header>
+        <!-- STEP 2: Contract Preview -->
+        <section id="step2" data-state="inactive"
+            class="contract-step hidden data-[state=active]:block data-[state=active]:animate-[var(--animate-fade-slide)] space-y-5">
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                <header
+                    class="flex flex-col items-center justify-between gap-4 border-b border-emerald-900 bg-gradient-to-br bg-emerald-700 px-6 py-5 sm:flex-row">
+                    <div class="flex items-center gap-4">
+                        <img src="{{ asset('images/new-logo1.png') }}" alt="أمر تم"
+                            class="h-14 w-auto brightness-0 invert">
+                        <div>
+                            <h2 class="text-xl font-extrabold text-white">عقد <span id="previewTypeLabel">-</span>
+                                إلكتروني</h2>
+                            <p class="text-xs text-emerald-200">رقم: <span id="previewNumber" dir="ltr"
+                                    lang="en-US">CNT-0001</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 text-xs text-emerald-200">
+                        <span><i class="fa fa-calendar ml-1"></i> من <span id="previewStart" dir="ltr"
+                                lang="en-US">-</span></span>
+                        <span>إلى <span id="previewEnd" dir="ltr" lang="en-US">-</span></span>
+                    </div>
+                </header>
+            </div>
 
-            <div class="bg-emerald-50/50 p-5 sm:p-7">
-                <div class="grid gap-5 lg:grid-cols-2">
+            <div class="grid gap-5 lg:grid-cols-2">
+                <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
                     <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
                         <div
-                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-900 to-emerald-800 px-5 py-3.5">
-                            <h3 class="text-base font-extrabold text-white">الطرف الأول</h3>
+                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-800 to-emerald-700 px-5 py-3.5">
+                            <h3 class="text-base font-extrabold text-white">الطرف الأول
+                            </h3>
                         </div>
                         <dl class="divide-y divide-emerald-100 text-sm">
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">اسم المنشأة</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">مؤسسة آمر تم
-                                    لخدمات الأعمال</dd>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
+                                    مؤسسة آمر تم لخدمات الأعمال</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">الرقم الوطني الموحد</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">7036125610</dd>
+                                <dt class="font-bold text-emerald-700">الرقم الوطني
+                                    الموحد</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
+                                    7036125610
+                                </dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">العنوان</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">جدة، حي الحمراء،
-                                    شارع فلسطين، مركز الجمجوم التجاري</dd>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
+                                    جدة، حي الحمراء، شارع فلسطين، مركز الجمجوم التجاري</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">البريد الإلكتروني</dt>
+                                <dt class="font-bold text-emerald-700">البريد
+                                    الإلكتروني</dt>
                                 <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">info@amrtm.com.sa
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">رقم الجوال</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">7036125610</dd>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">920002164</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">ويمثلها المدير العام</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">صالح بن ناصر
-                                    الشمراني</dd>
+                                <dt class="font-bold text-emerald-700">ويمثلها المدير
+                                    العام</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
+                                    صالح بن ناصر الشمراني
+                                </dd>
                             </div>
                         </dl>
                     </div>
-
+                </div>
+                <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
                     <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
                         <div
-                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-900 to-emerald-800 px-5 py-3.5">
+                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-800 to-emerald-700 px-5 py-3.5">
                             <h3 class="text-base font-extrabold text-white">الطرف الثاني</h3>
                         </div>
                         <dl class="divide-y divide-emerald-100 text-sm">
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">اسم المنشأة</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">مؤسسة 1</dd>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">شركة آفاق التقنية
+                                    المحدودة</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">الرقم الوطني الموحد</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">4XXXXXXXXXXXXX
-                                </dd>
+                                <dt class="font-bold text-emerald-700">الرقم الوطني
+                                    الموحد</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">7001234567</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">العنوان</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">جدة، حي الحمراء，
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">جدة، حي الحمراء،
                                     شارع فلسطين 2724، الرمز 23321</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">البريد الإلكتروني</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
-                                    ceo@XXXXXXXXXXX.com</dd>
+                                <dt class="font-bold text-emerald-700">البريد
+                                    الإلكتروني</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">info@example.com
+                                </dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
                                 <dt class="font-bold text-emerald-700">رقم الجوال</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">05XXXXXXXX</dd>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">0501234567</dd>
                             </div>
                             <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
-                                <dt class="font-bold text-emerald-700">ويمثلها المدير العام</dt>
-                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950"> خالد عبد الله
+                                <dt class="font-bold text-emerald-700">ويمثلها المدير
+                                    العام</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">محمد أحمد العتيبي
                                 </dd>
                             </div>
                         </dl>
                     </div>
                 </div>
             </div>
-        </section>
 
-        <!-- Clauses Section -->
-        <section class="rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-7">
-            <div id="clausesContainer" class="space-y-3">
+            <div id="previewClauses" class="space-y-3"></div>
 
-                <article class="flex rounded-xl p-2">
-                    <div class="min-w-0 flex-1">
-                        <h2 class="text-2xl font-black leading-tight text-emerald-950">
-                            التمهيد
-                        </h2>
-                        <p class="mt-2 text-sm leading-7 text-emerald-800">
-                            نظرًا لرغبة الطرف الثاني في الاستفادة من خبرات وخدمات الطرف الأول، وحرصًا من الطرفين على
-                            تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول
-                            تقديم الخدمات التجارية والإنجازات الإدارية للطرف الثاني لدى الجهات الحكومية والجهات الشريكة
-                            ذات العلاقة، وذلك وفقًا لأحكام هذا العقد وشروطه.
-                            ويُعد هذا التمهيد جزءًا لا يتجزأ من العقد ومكمّلًا لأحكامه.
-                        </p>
-                    </div>
-                </article>
-
-                @php
-                    $clauses = [
-                        [
-                            'title' => 'غرض العقد',
-                            'body' =>
-                                'يلتزم الطرف الأول بتنفيذ الخدمات التالية للطرف الثاني، على سبيل المثال لا الحصر:',
-                            'list' => [
-                                'متابعة وإنجاز المعاملات لدى الجهات الحكومية ذات العلاقة.',
-                                'التنسيق مع الجهات الشريكة والمعنية والمتصلة بأنشطة الطرف الثاني.',
-                                'إعداد وتجهيز الوثائق والمتطلبات الرسمية المرتبطة بالمعاملات.',
-                                'الاستعانة بالمختصين لتقديم الاستشارات التجارية والإدارية بما يخدم مصالح الطرف الثاني.',
-                                'أي خدمات إضافية يتفق عليها كتابيًا بين الطرفين.',
-                            ],
-                        ],
-                        [
-                            'title' => 'مدة العقد',
-                            'body' =>
-                                'مدة هذا العقد سنة واحدة، تبدأ من تاريخ 1/1/202__م وتنتهي في 31/12/202__م، ويجوز للطرفين تمديد العقد أو تعديله أو إنهاؤه بموجب اتفاق مكتوب بينهما عند حدوث ما يقتضي ذلك.',
-                        ],
-                        [
-                            'title' => 'التزامات الطرف الثاني',
-                            'body' => null,
-                            'subsections' => [
-                                [
-                                    'sub' => '1. تسليم المستندات',
-                                    'text' =>
-                                        'يلتزم الطرف الثاني بتسليم الطرف الأول جميع المستندات والبيانات والمعلومات المطلوبة لإنجاز المهام والخدمات المتفق عليها، وذلك لتمكين الطرف الأول من تنفيذ الأعمال الموكلة إليه.',
-                                ],
-                                [
-                                    'sub' => '2. توفير المستندات الإضافية',
-                                    'text' =>
-                                        'يلتزم الطرف الثاني بتقديم أي وثائق أو مستندات إضافية يطلبها الطرف الأول فيما يخص إنجاز المهام الموكلة إليه، متى كانت تلك المستندات لازمة أو مطلوبة لإتمام الإجراءات لدى الجهات الحكومية أو الجهات الأخرى ذات العلاقة.',
-                                ],
-                                [
-                                    'sub' => '3. سداد الرسوم',
-                                    'text' =>
-                                        'يلتزم الطرف الثاني بسداد جميع الرسوم الحكومية أو رسوم الجهات ذات العلاقة المطلوبة لإتمام أي إجراء، وذلك خلال المواعيد النظامية المحددة، ما لم يتم الاتفاق كتابيًا على خلاف ذلك.',
-                                ],
-                            ],
-                        ],
-                        [
-                            'title' => 'التزامات الطرف الأول',
-                            'body' => null,
-                            'list' => [
-                                'تتولى مؤسسة آمر تم لخدمات الأعمال تنفيذ جميع المهام والخدمات الموكلة إليها وفقًا لأحكام هذا العقد.',
-                                'يلتزم الطرف الأول بإتمام كافة الإجراءات النظامية المطلوبة خلال المدد المتفق عليها مع الطرف الثاني، وبذل العناية المهنية اللازمة في تنفيذ الخدمات.',
-                                'يلتزم الطرف الأول بتقديم الأعمال والخدمات بذمة ومهنية، والمحافظة على سرية المعلومات والوثائق الخاصة بالطرف الثاني وعدم استخدامها إلا في حدود تنفيذ الخدمات محل العقد.',
-                            ],
-                        ],
-                        [
-                            'title' => 'المراسلات',
-                            'body' =>
-                                'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد الرسائل النصية والمراسلات عبر تطبيق واتساب من المراسلات الرسمية والملزمة للطرفين من تاريخ إرسالها، وتكون لها حجية قانونية معتبرة في حدود ما يسمح به النظام.',
-                        ],
-                        [
-                            'title' => 'حل النزاعات',
-                            'body' =>
-                                'في حال حدوث أي خلاف – لا سمح الله – يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة مناسبة، وفي حال تعذر الوصول إلى حل ودي، يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة، المملكة العربية السعودية.',
-                        ],
-                        [
-                            'title' => 'القوة القاهرة',
-                            'body' => null,
-                            'list' => [
-                                'لا يُعد أي من الطرفين مُخلًا بالتزاماته التعاقدية إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته، مثل الكوارث الطبيعية، والحرائق، والفيضانات، والجوائح، والقرارات الحكومية، أو أي أحداث استثنائية غير متوقعة.',
-                                'يلتزم الطرف المتأثر بالقوة القاهرة بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، مع بيان طبيعتها وتأثيرها المتوقع على تنفيذ الالتزامات، متى أمكن ذلك.',
-                                'إذا استمرت حالة القوة القاهرة لمدة تتجاوز (60) ستين يومًا متواصلة، جاز لأي من الطرفين إنهاء العقد بإشعار كتابي للطرف الآخر، دون أن يترتب على ذلك أي تعويض، مع حفظ الحقوق والالتزامات المستحقة قبل وقوع حالة القوة القاهرة.',
-                            ],
-                        ],
-                        [
-                            'title' => 'المدفوعات',
-                            'body' => null,
-                            'list' => [
-                                'يلتزم الطرف الثاني بسداد قيمة هذا العقد، والبالغة (60,000) ستون ألف ريال سعودي سنويًا، شاملة ضريبة القيمة المضافة وفقًا للأنظمة المعمول بها.',
-                                'يتقاضى الطرف الأول القيمة المشار إليها في الفقرة السابقة على أربع دفعات سنوية ربع سنوية، بواقع (15,000) خمسة عشر ألف ريال سعودي لكل دفعة، تُستحق كل ثلاثة أشهر.',
-                                'يتم تحويل الدفعات المستحقة إلى الحساب البنكي المعتمد للطرف الأول، وفق البيانات التالية:',
-                            ],
-                            'bank' => [
-                                'اسم المستفيد: صالح الناصر',
-                                'رقم الحساب: XXXXXXXXXXXXXXXXXXXXXX',
-                                'البنك: البنك الأهلي السعودي',
-                                'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
-                            ],
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($clauses as $index => $clause)
-                    <article
-                        class="flex gap-4 rounded-xl border border-emerald-200 border-r-4 border-r-emerald-700 bg-emerald-50/50 p-4 sm:p-5 transition hover:bg-emerald-100/50">
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                <div class="border-b border-emerald-100 bg-emerald-50/50 px-5 py-3">
+                    <h3 class="flex items-center gap-2 text-sm font-extrabold text-emerald-900">
                         <span
-                            class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-100 text-sm font-black text-emerald-900 shadow-sm">{{ $index + 1 }}</span>
-                        <div class="min-w-0 flex-1">
-                            <h2 class="mb-2 text-lg font-extrabold text-emerald-900">{{ $clause['title'] }}</h2>
+                            class="grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white">i</span>
+                        ملخص العقد
+                    </h3>
+                </div>
+                <div class="grid gap-4 p-5 sm:grid-cols-3">
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 text-center">
+                        <p class="text-xs font-bold text-emerald-600">نوع العقد</p>
+                        <p id="summaryType" class="mt-1 text-sm font-extrabold text-emerald-900">-</p>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 text-center">
+                        <p class="text-xs font-bold text-emerald-600">قيمة العقد</p>
+                        <p id="summaryPrice" class="mt-1 text-sm font-extrabold text-emerald-900">-</p>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 text-center">
+                        <p class="text-xs font-bold text-emerald-600">عدد البنود</p>
+                        <p id="summaryClauses" class="mt-1 text-sm font-extrabold text-emerald-900">-</p>
+                    </div>
+                </div>
+            </div>
 
-                            @if (!empty($clause['body']))
-                                <p class="whitespace-pre-line text-sm leading-7 text-emerald-800">{{ $clause['body'] }}
-                                </p>
-                            @endif
-
-                            @if (!empty($clause['list']))
-                                <ol
-                                    class="mt-2 list-inside list-decimal space-y-1.5 text-sm leading-7 text-emerald-800">
-                                    @foreach ($clause['list'] as $item)
-                                        <li>{{ $item }}</li>
-                                    @endforeach
-                                </ol>
-                            @endif
-
-                            @if (!empty($clause['subsections']))
-                                <div class="mt-2 space-y-3">
-                                    @foreach ($clause['subsections'] as $sub)
-                                        <div>
-                                            <h3 class="text-sm font-extrabold text-emerald-900">{{ $sub['sub'] }}
-                                            </h3>
-                                            <p class="mt-1 whitespace-pre-line text-sm leading-7 text-emerald-800">
-                                                {{ $sub['text'] }}</p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-
-                            @if (!empty($clause['bank']))
-                                <div
-                                    class="mt-3 overflow-hidden rounded-xl border border-emerald-300 bg-emerald-100/70">
-                                    <table class="w-full text-right text-sm">
-                                        <tbody class="divide-y divide-emerald-200">
-                                            @foreach ($clause['bank'] as $line)
-                                                <tr>
-                                                    @php $parts = explode(': ', $line, 2); @endphp
-                                                    <td class="w-40 px-4 py-2.5 font-extrabold text-emerald-900">
-                                                        {{ $parts[0] }}</td>
-                                                    <td class="px-4 py-2.5 font-semibold text-emerald-950"
-                                                        dir="ltr">{{ $parts[1] ?? '' }}</td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            @endif
-                        </div>
-                    </article>
-                @endforeach
+            <div class="print:hidden flex items-center justify-between">
+                <button onclick="goToStep(1)"
+                    class="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-white px-6 py-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-50"><i
+                        class="fa fa-arrow-right text-xs"></i><span>السابق</span></button>
+                <button onclick="goToStep(3)"
+                    class="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-800 hover:shadow-xl"><span>إنشاء
+                        العقد</span><i class="fa fa-file-signature text-xs"></i></button>
             </div>
         </section>
 
-        <!-- Summary & Signature Section -->
-        <section class="rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-7">
-            <div
-                class="mb-5 flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-100/70 px-4 py-3 text-sm font-bold text-emerald-900">
-                <span
-                    class="grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-xs font-bold text-white">i</span>
-                <span>تفاصيل العقد المختار وحالة التوقيع الحالية</span>
+        <!-- STEP 3: Final Contract -->
+        <section id="step3" data-state="inactive"
+            class="contract-step hidden data-[state=active]:block data-[state=active]:animate-[var(--animate-fade-slide)] space-y-5">
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                <header
+                    class="flex flex-col items-center justify-between gap-4 border-b-2 border-emerald-700 bg-emerald-700  to-emerald-850 px-6 py-6 sm:flex-row">
+                    <div class="flex items-center gap-4">
+                        <img src="{{ asset('images/new-logo1.png') }}" alt="أمر تم"
+                            class="h-16 w-auto brightness-0 invert">
+                        <div>
+                            <h2 class="text-xl font-black text-white">عقد <span id="finalTypeLabel">-</span> إلكتروني
+                            </h2>
+                            <p class="text-xs text-emerald-200">رقم: <span id="finalNumber" dir="ltr"
+                                    lang="en-US">CNT-0001</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-xs text-emerald-200">
+                        <div class="rounded-lg bg-white/10 px-3 py-2 text-center">
+                            <p class="text-[10px] font-bold text-emerald-300">بداية</p>
+                            <p id="finalStart" dir="ltr" lang="en-US" class="font-bold text-white">-</p>
+                        </div>
+                        <i class="fa fa-arrow-left text-emerald-400"></i>
+                        <div class="rounded-lg bg-white/10 px-3 py-2 text-center">
+                            <p class="text-[10px] font-bold text-emerald-300">نهاية</p>
+                            <p id="finalEnd" dir="ltr" lang="en-US" class="font-bold text-white">-</p>
+                        </div>
+                        <div class="rounded-lg bg-white/10 px-3 py-2 text-center">
+                            <p class="text-[10px] font-bold text-emerald-300">المدة</p>
+                            <p dir="ltr" lang="en-US" class="font-bold text-white">1 سنة</p>
+                        </div>
+                    </div>
+                </header>
             </div>
+
             <div class="grid gap-5 lg:grid-cols-2">
-                <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 shadow-sm">
-                    <h2 class="mb-4 font-extrabold text-emerald-900">بيانات العميل</h2>
-                    <dl class="space-y-3 text-sm">
-                        <div class="flex justify-between gap-4">
-                            <dt class="font-bold text-emerald-700">الاسم</dt>
-                            <dd class="font-semibold text-emerald-950">خالد عبد الله </dd>
+                <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                    <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
+                        <div
+                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-800 to-emerald-700 px-5 py-3.5">
+                            <h3 class="text-base font-extrabold text-white">الطرف الأول
+                            </h3>
                         </div>
-                        <div class="flex justify-between gap-4">
-                            <dt class="font-bold text-emerald-700">رقم الجوال</dt>
-                            <dd class="font-semibold text-emerald-950">05XXXXXXXX</dd>
-                        </div>
-                    </dl>
+                        <dl class="divide-y divide-emerald-100 text-sm">
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">اسم المنشأة</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">
+                                    مؤسسة آمر تم لخدمات الأعمال</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">الرقم الوطني
+                                    الموحد</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">7036125610
+                                </dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">العنوان</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">جدة، حي الحمراء،
+                                    شارع فلسطين، مركز الجمجوم التجاري
+                                </dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">البريد
+                                    الإلكتروني</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">info@amrtm.com.sa
+                                </dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">رقم الجوال</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">920002164</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">ويمثلها المدير
+                                    العام</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">صالح بن ناصر
+                                    الشمراني
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
                 </div>
-                <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 shadow-sm">
-                    <h2 class="mb-4 font-extrabold text-emerald-900">بيانات العقد</h2>
-                    <dl class="space-y-3 text-sm">
-                        <div class="flex justify-between gap-4">
-                            <dt class="font-bold text-emerald-700">رقم العقد</dt>
-                            <dd class="en-numbers font-semibold text-emerald-950" dir="ltr">CNT-0001</dd>
+                <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-sm">
+                    <div class="overflow-hidden rounded-xl border border-emerald-200 bg-white shadow-sm">
+                        <div
+                            class="flex items-center justify-center border-b border-emerald-900 bg-gradient-to-r from-emerald-800 to-emerald-700 px-5 py-3.5">
+                            <h3 class="text-base font-extrabold text-white">الطرف الثاني</h3>
                         </div>
-                        <div class="flex justify-between gap-4">
-                            <dt class="font-bold text-emerald-700">تاريخ الإنشاء</dt>
-                            <dd class="en-numbers font-semibold text-emerald-950" dir="ltr">2026-09-01</dd>
-                        </div>
-                    </dl>
+                        <dl class="divide-y divide-emerald-100 text-sm">
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">اسم المنشأة</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">شركة آفاق التقنية
+                                    المحدودة</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">الرقم الوطني الموحد</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">7001234567</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">العنوان</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">جدة، حي الحمراء،
+                                    شارع فلسطين 2724، الرمز 23321</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">البريد
+                                    الإلكتروني</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">info@example.com
+                                </dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">رقم الجوال</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">0501234567</dd>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 px-4 py-3.5 sm:px-5">
+                                <dt class="font-bold text-emerald-700">ويمثلها المدير
+                                    العام</dt>
+                                <dd class="col-span-2 wrap-break-word font-semibold text-emerald-950">محمد أحمد العتيبي
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
                 </div>
             </div>
-            <div class="mt-5 grid gap-4 sm:grid-cols-2">
-                <div class="rounded-xl border border-emerald-200 bg-white p-4">
-                    <p class="mb-2 text-xs font-bold text-emerald-700">حالة العقد</p>
+
+            <div id="finalClauses" class="space-y-3"></div>
+
+            <div class="overflow-hidden rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:p-6">
+                <h3 class="mb-4 flex items-center gap-2 text-sm font-extrabold text-emerald-900">
                     <span
-                        class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-extrabold text-emerald-900">بانتظار
-                        التوقيع</span>
-                </div>
-                <div class="rounded-xl border border-emerald-200 bg-white p-4">
-                    <p class="mb-2 text-xs font-bold text-emerald-700">حالة الدفع</p>
-                    <span
-                        class="inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-extrabold text-emerald-900">لم
-                        يتم
-                        الدفع</span>
+                        class="grid h-5 w-5 place-items-center rounded-full bg-emerald-700 text-[10px] text-white">i</span>
+                    حالة العقد والتوقيع
+                </h3>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                        <p class="text-xs font-bold text-emerald-600">حالة العقد</p><span
+                            class="mt-1 inline-block rounded-full bg-amber-100 px-3 py-1 text-xs font-extrabold text-amber-800">بانتظار
+                            التوقيع</span>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                        <p class="text-xs font-bold text-emerald-600">حالة الدفع</p><span
+                            class="mt-1 inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-extrabold text-red-700">لم
+                            يتم الدفع</span>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                        <p class="text-xs font-bold text-emerald-600">الطرف الأول</p><span id="signP1"
+                            class="mt-1 inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-extrabold text-red-700">لم
+                            يوقّع</span>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4">
+                        <p class="text-xs font-bold text-emerald-600">الطرف الثاني</p><span id="signP2"
+                            class="mt-1 inline-block rounded-full bg-red-100 px-3 py-1 text-xs font-extrabold text-red-700">لم
+                            يوقّع</span>
+                    </div>
                 </div>
             </div>
-            <div class="flex flex-row justify-between">
-                <label class="mt-7 flex cursor-pointer items-center gap-2.5 text-sm font-bold text-emerald-900">
+
+            <div
+                class="print:hidden flex flex-col gap-4 rounded-2xl border border-emerald-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+                <label class="flex cursor-pointer items-center gap-2.5 text-sm font-bold text-emerald-900">
                     <input id="termsAccepted" type="checkbox" required
                         class="h-5 w-5 rounded border-emerald-300 text-emerald-700 focus:ring-emerald-500 accent-emerald-700">
                     <span>أوافق على <a href="#" class="text-emerald-700 underline hover:text-emerald-950">الشروط
-                            والأحكام</a> وأقر بصحة البيانات المدخلة</span>
+                            والأحكام</a> وأقر بصحة البيانات</span>
                 </label>
-                <a href="{{ route('amrtm.index') }}"
-                    class="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-emerald-900 px-5 py-3.5 text-base font-extrabold text-white shadow-lg shadow-emerald-900/20 transition-all hover:bg-emerald-950 hover:shadow-xl sm:w-auto sm:min-w-56">
-                    التوقيع
-                </a>
+                <div class="flex items-center gap-3">
+                    <button onclick="goToStep(2)"
+                        class="inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-white px-5 py-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-50"><i
+                            class="fa fa-arrow-right text-xs"></i><span>السابق</span></button>
+                    <button onclick="signContract()"
+                        class="inline-flex items-center gap-2 rounded-xl bg-emerald-900 px-8 py-3.5 text-sm font-extrabold text-white shadow-lg shadow-emerald-900/20 transition hover:bg-emerald-950 hover:shadow-xl"><i
+                            class="fa fa-file-signature text-xs"></i><span>توقيع العقد</span></button>
+                </div>
             </div>
         </section>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        /**
+         * ============================================================
+         *  contract-wizard.js
+         *  منطق معالج إنشاء العقد (3 خطوات)
+         *  - تم فصل البيانات (CONTRACT_TYPES) عن منطق العرض
+         *  - كل إدراج نصوص داخل DOM يمر عبر escapeHtml() لمنع XSS
+         *  - التحقق من المدخلات (validation) قبل الانتقال بين الخطوات
+         *  - أرقام العقد والتواريخ يجب أن تُصادَق من الخادم أيضًا
+         *    (التحقق هنا للتجربة فقط، وليس بديلاً عن التحقق في الـ backend)
+         * ============================================================
+         */
+
+        'use strict';
+
+        // ============================================================
+        // 1) البيانات الثابتة لأنواع العقود
+        //    (يفضّل جلبها من الـ backend عبر API بدل تضمينها هنا،
+        //     لضمان عدم تلاعب المستخدم بالأسعار من جهة العميل)
+        // ============================================================
+        const CONTRACT_TYPES = Object.freeze({
+            1: {
+                name: 'خدمات فورية',
+                price: 2999,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في الاستفادة من خدمات الطرف الأول المحدودة والمحددة، وحرصًا من الطرفين على تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول تقديم الخدمات الفورية المتفق عليها للطرف الثاني وفقًا لأحكام هذا العقد وشروطه. ويُعد هذا التمهيد جزءًا لا يتجزأ من العقد ومكمّلًا لأحكامه.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يلتزم الطرف الأول بتنفيذ الخدمات التالية للطرف الثاني، على سبيل المثال لا الحصر:',
+                        list: [
+                            'تقديم الاستشارات الفورية المتخصصة حسب الطلب.',
+                            'إعداد الوثائق والمستندات المطلوبة بشكل مباشر.',
+                            'التنسيق مع الجهات المعنية لإنجاز المعاملات المستعجلة.',
+                            'أي خدمات إضافية محددة يتفق عليها كتابيًا بين الطرفين.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين تمديد العقد أو تعديله بموجب اتفاق مكتوب بينهما، ولا يُعد هذا العقد ملزمًا بأي خدمات لاحقة إلا بموجب ملحق مكتوب.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        subsections: [{
+                                sub: '1. التنفيذ وفق المعايير',
+                                text: 'تنفيذ جميع الخدمات الفورية المتفق عليها بذمة ومهنية وفقًا لأعلى المعايير المهنية وأصول الصناعة.'
+                            },
+                            {
+                                sub: '2. الالتزام بالمواعيد',
+                                text: 'الالتزام بالمواعيد النهائية المحددة لكل خدمة، مع حق الطرف الثاني في التعويض عن أي تأخير غير مبرر وفق أحكام هذا العقد.'
+                            },
+                            {
+                                sub: '3. السرية',
+                                text: 'المحافظة على سرية المعلومات والوثائق الخاصة بالطرف الثاني وعدم إفشائها لأي طرف ثالث إلا بموافقة كتابية.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'تسليم جميع المستندات والبيانات المطلوبة للطرف الأول في المواعيد المتفق عليها.',
+                            'سداد قيمة العقد وفقًا للجدول الزمني المتفق عليه.',
+                            'المشاركة الفعالة وتوفير ما يلزم لتمكين الطرف الأول من تقديم الخدمات.',
+                            'إشعار الطرف الأول كتابيًا بأي تغيير في البيانات أو الظروف ذات الصلة.'
+                        ]
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'يلتزم الطرف الثاني بسداد قيمة هذا العقد والبالغة ({price}) ريال سعودي شاملة ضريبة القيمة المضافة وفقًا للأنظمة المعمول بها، ويتم السداد بالتحويل البنكي إلى الحساب المعتمد للطرف الأول وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي شاملة الضريبة',
+                            'طريقة الدفع: تحويل بنكي',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'المراسلات',
+                        text: 'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد المراسلات عبر التطبيقات الرقمية المعتمدة ملزمة للطرفين من تاريخ إرسالها.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    },
+                    {
+                        title: 'القوة القاهرة',
+                        list: [
+                            'لا يُعد أي من الطرفين مُخلًا بالتزاماته إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته، مثل الكوارث الطبيعية والحرائق والجوائح والقرارات الحكومية الاستثنائية.',
+                            'يلتزم الطرف المتأثر بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، ويُعاد تنظيم المدد المتأثرة.',
+                            'إذا استمرت حالة القوة القاهرة أكثر من (60) يومًا متواصلة جاز لأي من الطرفين إنهاء العقد دون تعويض، مع حفظ الحقوق المستحقة قبل وقوع الحالة.'
+                        ]
+                    }
+                ]
+            },
+            2: {
+                name: 'خدمات آمر تم السنوي',
+                price: 4999,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في الاستفادة من خبرات وخدمات الطرف الأول على مدار العام، وحرصًا من الطرفين على تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول تقديم الخدمات التجارية والإنجازات الإدارية للطرف الثاني لدى الجهات الحكومية والجهات الشريكة ذات العلاقة، وذلك وفقًا لأحكام هذا العقد وشروطه. ويُعد هذا التمهيد جزءًا لا يتجزأ من العقد ومكمّلًا لأحكامه.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يلتزم الطرف الأول بتنفيذ الخدمات التالية للطرف الثاني على مدار مدة العقد:',
+                        list: [
+                            'متابعة وإنجاز المعاملات لدى الجهات الحكومية ذات العلاقة.',
+                            'التنسيق مع الجهات الشريكة والمعنية بأنشطة الطرف الثاني.',
+                            'إعداد وتجهيز الوثائق والمتطلبات الرسمية المرتبطة بالمعاملات.',
+                            'الاستعانة بالمختصين لتقديم الاستشارات التجارية والإدارية.',
+                            'التمثيل القانوني أمام الجهات المختصة عند الحاجة.',
+                            'إعداد التقارير الدورية حول سير المعاملات والخدمات.',
+                            'أي خدمات إضافية يتفق عليها كتابيًا بين الطرفين.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة (12 شهرًا)، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين تمديد العقد أو تعديله أو إنهاؤه بموجب اتفاق مكتوب عند حدوث ما يقتضي ذلك.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        subsections: [{
+                                sub: '1. إنجاز المعاملات',
+                                text: 'تتولى المؤسسة المقدمة للخدمة تنفيذ جميع المهام والخدمات الموكلة إليها وفقًا لأحكام هذا العقد وبذل العناية المهنية اللازمة.'
+                            },
+                            {
+                                sub: '2. الالتزام بالمدد النظامية',
+                                text: 'إتمام كافة الإجراءات النظامية خلال المدد المتفق عليها مع الطرف الثاني، والإشعار الفوري بأي مستجدات قد تؤثر على الإنجاز.'
+                            },
+                            {
+                                sub: '3. السرية والمهنية',
+                                text: 'تقديم الأعمال والخدمات بذمة ومهنية، والمحافظة على سرية المعلومات والوثائق الخاصة بالطرف الثاني وعدم استخدامها إلا في حدود تنفيذ الخدمات محل العقد.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        subsections: [{
+                                sub: '1. تسليم المستندات',
+                                text: 'يلتزم الطرف الثاني بتسليم الطرف الأول جميع المستندات والبيانات المطلوبة لإنجاز المهام والخدمات المتفق عليها.'
+                            },
+                            {
+                                sub: '2. توفير المستندات الإضافية',
+                                text: 'تقديم أي وثائق أو مستندات إضافية يطلبها الطرف الأول متى كانت لازمة لإتمام الإجراءات لدى الجهات المختصة.'
+                            },
+                            {
+                                sub: '3. سداد الرسوم',
+                                text: 'سداد جميع الرسوم الحكومية أو رسوم الجهات ذات العلاقة المطلوبة لإتمام الإجراءات خلال المواعيد النظامية ما لم يُتفق كتابيًا على خلاف ذلك.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'يلتزم الطرف الثاني بسداد قيمة هذا العقد والبالغة ({price}) ريال سعودي سنويًا شاملة ضريبة القيمة المضافة، على أربع دفعات ربع سنوية، كل دفعة بقيمة (1,250) ريال سعودي تُستحق كل ثلاثة أشهر، ويتم السداد بالتحويل البنكي وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي سنويًا',
+                            'طريقة الدفع: أربع دفعات ربع سنوية',
+                            'قيمة كل دفعة: 1,250 ريال سعودي',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'المراسلات',
+                        text: 'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد الرسائل النصية والمراسلات عبر تطبيق واتساب من المراسلات الرسمية والملزمة من تاريخ إرسالها، وتكون لها حجية قانونية معتبرة في حدود ما يسمح به النظام.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر الوصول إلى حل ودي يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    },
+                    {
+                        title: 'القوة القاهرة',
+                        list: [
+                            'لا يُعد أي من الطرفين مُخلًا بالتزاماته إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته، مثل الكوارث الطبيعية والحرائق والفيضانات والجوائح والقرارات الحكومية.',
+                            'يلتزم الطرف المتأثر بالقوة القاهرة بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، مع بيان طبيعتها وتأثيرها المتوقع.',
+                            'إذا استمرت حالة القوة القاهرة أكثر من (60) يومًا متواصلة جاز لأي من الطرفين إنهاء العقد بإشعار كتابي دون تعويض، مع حفظ الحقوق والالتزامات المستحقة قبل وقوع الحالة.'
+                        ]
+                    }
+                ]
+            },
+            3: {
+                name: 'الاشتراكات في المنصة',
+                price: 1499,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في الاشتراك في منصة أمرتم الرقمية والاستفادة من الخدمات المقدمة عبرها، وحرصًا من الطرفين على تنظيم العلاقة بينهما، فقد اتفق الطرفان على منح الطرف الثاني حق الاشتراك والوصول وفقًا لأحكام هذا العقد وشروطه، ويُعد هذا التمهيد جزءًا لا يتجزأ من العقد.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يمنح هذا العقد الطرف الثاني حق الوصول إلى منصة أمرتم والخدمات التالية:',
+                        list: [
+                            'الوصول إلى لوحة التحكم الأساسية في المنصة.',
+                            'استخدام أدوات إدارة المعاملات والمستندات الرقمية.',
+                            'الاستفادة من خدمات الدعم الفني عبر المنصة.',
+                            'الوصول إلى التقارير والإحصائيات المتاحة.',
+                            'استخدام واجهة برمجة التطبيقات (API) وفقًا لباقة الاشتراك.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، يُجدد تلقائيًا ما لم يُخطر أي من الطرفين الآخر كتابيًا برغبته في الإلغاء قبل (30) ثلاثين يومًا من انتهاء المدة.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        list: [
+                            'تأمين استمرارية عمل المنصة بأعلى كفاءة ممكنة.',
+                            'تقديم الدعم الفني عبر البريد الإلكتروني خلال أوقات العمل النظامية.',
+                            'حماية البيانات والمعلومات الخاصة بالطرف الثاني وفقًا لسياسة الخصوصية المعتمدة.',
+                            'إشعار الطرف الثاني مسبقًا بأي صيانة مجدولة تؤثر على الخدمة.'
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'الحفاظ على سرية بيانات الدخول الخاصة بحسابه في المنصة.',
+                            'عدم مشاركة بيانات الدخول أو الوصول مع أطراف ثالثة دون إذن.',
+                            'الالتزام بشروط الاستخدام وسياسة الخصوصية المعتمدة للمنصة.',
+                            'سداد قيمة الاشتراك في مواعيده المستحقة، وإشعار الطرف الأول بأي استخدام غير نظامي لحسابه.'
+                        ]
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'يلتزم الطرف الثاني بسداد قيمة الاشتراك في هذا العقد والبالغة ({price}) ريال سعودي شاملة ضريبة القيمة المضافة سنويًا أو وفقًا للخطة المختارة، ويتم السداد بالتحويل البنكي أو بطاقة الائتمان وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي سنويًا',
+                            'طريقة الدفع: تحويل بنكي أو بطاقة ائتمان',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'أمن البيانات والسرية',
+                        text: 'يتعهد الطرف الأول بحماية البيانات المقدمة من الطرف الثاني وفق أنظمة حماية البيانات المعمول بها، وعدم استخدامها إلا لغرض تشغيل الخدمة، مع التزام الطرف الثاني بأمن بيانات دخوله، ويتحمل كل طرف مسؤولية أي إخلال من جانبه.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    }
+                ]
+            },
+            4: {
+                name: 'الوساطة',
+                price: 3499,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في الاستفادة من خبرة الطرف الأول في مجال الوساطة التجارية والتفاوض مع الأطراف الثالثة، وحرصًا من الطرفين على تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول تقديم خدمات الوساطة والتفاوض وفقًا لأحكام هذا العقد وشروطه.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يلتزم الطرف الأول بتقديم خدمات الوساطة التالية للطرف الثاني:',
+                        list: [
+                            'التمثيل والتفاوض نيابة عن الطرف الثاني أمام الأطراف الثالثة.',
+                            'البحث عن الفرص المتاحة في السوق وتقديمها للطرف الثاني.',
+                            'التنسيق بين الطرف الثاني والأطراف المعنية لتعزيز الفرص التجارية.',
+                            'تقديم التقارير الدورية عن سير التفاوض والوساطة.',
+                            'أي خدمات وساطة إضافية يتفق عليها كتابيًا.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين تمديد العقد أو تعديله بموجب اتفاق مكتوب بينهما.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        list: [
+                            'القيام بواجبات الوساطة بأمانة ونزاهة ومهنية عالية.',
+                            'عدم تمثيل أطراف متعارضة المصالح دون موافقة كتابية من الطرف الثاني.',
+                            'المحافظة على سرية جميع المعلومات والبيانات المتعلقة بالطرف الثاني.',
+                            'تقديم تقارير دورية للطرف الثاني عن سير العمل، وإشعاره بأي مستجدات جوهرية فور حدوثها.'
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'توفير جميع المعلومات والبيانات اللازمة للطرف الأول لأداء مهام الوساطة.',
+                            'عدم التفاوض مباشرة مع الأطراف الثالثة المختصة بالوساطة دون تنسيق مع الطرف الأول.',
+                            'سداد المستحقات المالية للطرف الأول وفقًا لشروط هذا العقد.',
+                            'الإخطار الكتابي للطرف الأول بأي تغيير في ظروفه قد تؤثر على الوساطة.'
+                        ]
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'يلتزم الطرف الثاني بسداد قيمة هذا العقد والبالغة ({price}) ريال سعودي شاملة ضريبة القيمة المضافة، إضافة إلى أي عمولة نجاح تُتفق عليها كتابيًا عند إتمام الصفقة، ويتم السداد بالتحويل البنكي وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي',
+                            'طريقة الدفع: تحويل بنكي',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'المراسلات',
+                        text: 'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد المراسلات عبر التطبيقات الرقمية المعتمدة ملزمة للطرفين من تاريخ إرسالها.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    },
+                    {
+                        title: 'القوة القاهرة',
+                        text: 'لا يُعد أي من الطرفين مُخلًا بالتزاماته إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته، ويلتزم الطرف المتأثر بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، وإذا استمرت الحالة أكثر من (60) يومًا جاز لأي من الطرفين إنهاء العقد دون تعويض.'
+                    }
+                ]
+            },
+            5: {
+                name: 'التوريد',
+                price: 8999,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في توريد التجهيزات والمواد واللوازم المكتبية والفنية من الطرف الأول، وحرصًا من الطرفين على تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول عمليات التوريد وفقًا للمواصفات والشروط الواردة في هذا العقد، ويُعد هذا التمهيد جزءًا لا يتجزأ من العقد ومكمّلًا لأحكامه.'
+                    },
+                    {
+                        title: 'غرض العقد ونطاق التوريد',
+                        text: 'يتعهد الطرف الأول بتوريد التجهيزات والمواد واللوازم التالية للطرف الثاني خلال مدة العقد:',
+                        list: [
+                            'معدات ولوازم مكتبية وتقنية.',
+                            'مستلزمات التشغيل والاستهلاك اليومية.',
+                            'أي مواد أو تجهيزات إضافية إلحاقية يتفق عليهما كتابيًا بحسب الحاجة.'
+                        ]
+                    },
+                    {
+                        title: 'المواصفات الفنية',
+                        text: 'تُورَّد جميع المواد مطابقة للمواصفات الفنية والمعايير المعتمدة المتفق عليها مسبقًا، ويحق للطرف الثاني رفض أو إعادة أي إمدادات غير مطابقة للمواصفات خلال (7) سبعة أيام من الاستلام، وعلى الطرف الأول استبدالها فورًا دون تحميل الطرف الثاني أي تكاليف.'
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين تمديد العقد أو تجديده بموجب اتفاق مكتوب، على ألا يستفيد الطرف الثاني من أي توريد خارج مدة العقد إلا بملحق مكتوب.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        subsections: [{
+                                sub: '1. مطابقة المواصفات',
+                                text: 'توريد المواد المطابقة للمواصفات والمعايير الفنية المتفق عليها، وتحمّل المسؤولية الكاملة عن جودة وسلامة الإمدادات.'
+                            },
+                            {
+                                sub: '2. الالتزام بالجداول الزمنية',
+                                text: 'تسليم الإمدادات وفق الجداول الزمنية المتفق عليها، ويتحمل الطرف الأول أي التزامات ناتجة عن التأخير غير المبرر في التسليم.'
+                            },
+                            {
+                                sub: '3. التغليف والنقل',
+                                text: 'تغليف المواد وتأمين نقلها حتى مقر الاستلام المتفق عليه على نفقة الطرف الأول، على أن يكون التغليف مناسبًا لطبيعة المواد.'
+                            },
+                            {
+                                sub: '4. تقارير التوريد',
+                                text: 'إعداد تقارير دورية بحالات الشحن والتسليم، وإشعار الطرف الثاني بأي تأخير متوقع بشأن الجدول الزمني.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'الفحص والقبول',
+                        text: 'يتم فحص الإمدادات عند الاستلام بحضور ممثلي الطرفين، وتُحرر محاضر استلام موقعة، ويعتبر القبول نهائيًا بعد خلو الإمدادات من العيوب الظاهرة والمستترة، مع بقاء حق الطرف الثاني في المطالبة بالضمان بعد القبول.'
+                    },
+                    {
+                        title: 'الضمان',
+                        text: 'يلتزم الطرف الأول بضمان الإمدادات لمدة لا تقل عن (12) اثني عشر شهرًا من تاريخ الاستلام النهائي، ويتحمل إصلاح أو استبدال أي تالف خلال الضمان دون تحميل الطرف الثاني أي تكاليف إضافية.'
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'تحديد الاحتياجات والمواصفات المطلوبة كتابيًا وتأكيدها قبل بدء التوريد.',
+                            'تجهيز مقر الاستلام والتسهيل اللازم لاستقبال الإمدادات.',
+                            'الالتزام بالمواعيد المتفق عليها للاستلام والفحص.',
+                            'سداد قيمة التوريدات وفق شروط الدفع المتفق عليها في هذا العقد.'
+                        ]
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'قيمة هذا العقد الإجمالية ({price}) ريال سعودي شاملة ضريبة القيمة المضافة، وتُدفع وفقًا لجدول المدفوعات المتفق عليه عند التسليم والفحص، ويتم السداد بالتحويل البنكي وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي شاملة الضريبة',
+                            'طريقة الدفع: تحويل بنكي على دفعات حسب جداول التسليم',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'المراسلات',
+                        text: 'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد المراسلات عبر التطبيقات الرقمية المعتمدة ملزمة للطرفين من تاريخ إرسالها.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    },
+                    {
+                        title: 'القوة القاهرة',
+                        list: [
+                            'لا يُعد أي من الطرفين مُخلًا بالتزاماته إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته.',
+                            'يلتزم الطرف المتأثر بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، وتُعاد جدولة الالتزامات المتأثرة.',
+                            'إذا استمرت الحالة أكثر من (60) يومًا متواصلة جاز لأي من الطرفين إنهاء العقد دون تعويض مع حفظ الحقوق المستحقة.'
+                        ]
+                    }
+                ]
+            },
+            6: {
+                name: 'الصيانة والتشغيل',
+                price: 6499,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في إسناد أعمال الصيانة والتشغيل الفني إلى الطرف الأول لضمان استمرارية وكفاءة تشغيل الأجهزة والمعدات والمرافق، وحرصًا من الطرفين على تنظيم العلاقة بينهما، فقد اتفق الطرفان على أن يتولى الطرف الأول أعمال الصيانة الوقائية والتصحيحية والتشغيل وفقًا لأحكام هذا العقد وشروطه.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يتولى الطرف الأول الأعمال التالية للطرف الثاني:',
+                        list: [
+                            'الصيانة الوقائية والدورية للأجهزة والمعدات وفق برنامج زمني معتمد.',
+                            'أعمال التشغيل والإشراف الفني اليومي.',
+                            'الصيانة التصحيحية عند الأعطال خلال مدة الاستجابة المتفق عليها.',
+                            'توفير قطع الغيار والمستهلكات اللازمة وفق الحاجة.',
+                            'إعداد سجلات الصيانة والتقارير الدورية عن حالة الأجهزة والمعدات.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين التمديد أو التجديد بموجب اتفاق مكتوب قبل انتهاء المدة بشهر واحد على الأقل.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        subsections: [{
+                                sub: '1. برنامج الصيانة الوقائية',
+                                text: 'تنفيذ برنامج الصيانة الوقائية الدوري وفق الجدول المعتمد دون الإخلال بسير الأعمال لدى الطرف الثاني.'
+                            },
+                            {
+                                sub: '2. مدة الاستجابة',
+                                text: 'الاستجابة للأعطال والبلاغات خلال مدة لا تتجاوز (24) أربعًا وعشرين ساعة، وإنجاز الإصلاح في أسرع وقت ممكن.'
+                            },
+                            {
+                                sub: '3. الجودة وقطع الغيار',
+                                text: 'استخدام قطع غيار أصلية أو ما يعادلها والمعتمدة، والالتزام بجودة الإصلاحات وضمانها لمدة معقولة.'
+                            },
+                            {
+                                sub: '4. السجلات والتقارير',
+                                text: 'حفظ سجلات الصيانة وتقديم تقارير دورية شهرية عن الأعمال المنفذة وحالة المعدات.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'إتاحة الوصول إلى الأجهزة والمعدات والمرافق في الأوقات المتفق عليها.',
+                            'إبلاغ الطرف الأول بأي أعطال أو ملاحظات فورية عند اكتشافها.',
+                            'عدم إسناد أعمال الصيانة المتعلقة بنطاق العقد لأطراف أخرى دون موافقة الطرف الأول.',
+                            'سداد مستحقات الطرف الأول في مواعيدها المتفق عليها، وإفساح المجال لتنفيذ الأعمال دون معوقات.'
+                        ]
+                    },
+                    {
+                        title: 'الضمان',
+                        text: 'يلتزم الطرف الأول بضمان جميع أعمال الصيانة والإصلاحات المنفذة لمدة لا تقل عن (3) ثلاثة أشهر، ويشمل الضمان الأعمال التنفيذية وقطع الغيار ذات العيوب الصناعية، مع استثناء الأعطال الناتجة عن سوء الاستخدام أو التعديل غير المصرح به.'
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'قيمة هذا العقد ({price}) ريال سعودي شاملة ضريبة القيمة المضافة سنويًا، وتُدفع على دفعات ربع سنوية، ويتم السداد بالتحويل البنكي وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي سنويًا',
+                            'طريقة الدفع: دفعات ربع سنوية',
+                            'قيمة كل دفعة: 1,625 ريال سعودي',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'المراسلات',
+                        text: 'تتم جميع المراسلات بين الطرفين عبر البريد الإلكتروني والأرقام المعتمدة من قبلهما، وتُعد المراسلات عبر التطبيقات الرقمية المعتمدة ملزمة للطرفين من تاريخ إرسالها.'
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    },
+                    {
+                        title: 'القوة القاهرة',
+                        text: 'لا يُعد أي من الطرفين مُخلًا بالتزاماته إذا أعاق تنفيذها ظرف طارئ أو قوة قاهرة خارجة عن إرادته، ويلتزم الطرف المتأثر بإخطار الطرف الآخر كتابيًا فور وقوع الحالة، وإذا استمرت الحالة أكثر من (60) يومًا جاز لأي من الطرفين إنهاء العقد دون تعويض.'
+                    }
+                ]
+            },
+            7: {
+                name: 'الاستشارات الإدارية',
+                price: 5499,
+                clauses: [{
+                        title: 'التمهيد',
+                        text: 'نظرًا لرغبة الطرف الثاني في الاستعانة بخبرات الطرف الأول في مجال الاستشارات الإدارية لتطوير أدائه وتنظيم أعماله، وحرصًا من الطرفين على تنظيم العلاقة بينهما بما يحقق المصالح المشتركة، فقد اتفق الطرفان على أن يتولى الطرف الأول تقديم الخدمات الاستشارية وفقًا لأحكام هذا العقد وشروطه.'
+                    },
+                    {
+                        title: 'غرض العقد',
+                        text: 'يلتزم الطرف الأول بتقديم الاستشارات الإدارية التالية للطرف الثاني:',
+                        list: [
+                            'الهيكلة التنظيمية وإعداد السياسات والأنظمة الداخلية.',
+                            'تطوير الحوكمة وضوابط الإدارة الرشيدة.',
+                            'تحسين جودة العمليات والخدمات المقدمة للعملاء.',
+                            'إعداد الخطط الاستراتيجية وقياس مؤشرات الأداء.',
+                            'البرامج التدريبية ورفع كفاءة الموارد البشرية.',
+                            'أي استشارات إدارية إضافية يتفق عليها كتابيًا.'
+                        ]
+                    },
+                    {
+                        title: 'مدة العقد',
+                        text: 'مدة هذا العقد سنة واحدة، وتبدأ من تاريخ {start} وتنتهي في {end}، ويجوز للطرفين تمديد العقد أو تجديده بموجب اتفاق مكتوب بينهما.'
+                    },
+                    {
+                        title: 'التزامات الطرف الأول',
+                        subsections: [{
+                                sub: '1. جودة المخرجات',
+                                text: 'تقديم الاستشارات بأعلى مستويات الجودة والدقة وبما يتوافق مع أفضل الممارسات والأنظمة المعمول بها.'
+                            },
+                            {
+                                sub: '2. المواعيد',
+                                text: 'إنجاز المهام الاستشارية ضمن الجداول الزمنية المتفق عليها، وإشعار الطرف الثاني بأي مستجدات قد تؤثر على المواعيد.'
+                            },
+                            {
+                                sub: '3. السرية',
+                                text: 'المحافظة على سرية جميع المعلومات والبيانات الخاصة بالطرف الثاني وعدم إفشائها لأي طرف ثالث دون موافقة كتابية مسبقة.'
+                            }
+                        ]
+                    },
+                    {
+                        title: 'التزامات الطرف الثاني',
+                        list: [
+                            'توفير المعلومات والبيانات اللازمة للطرف الأول لأداء المهام الاستشارية.',
+                            'تعيين جهة تواصل مسؤولة للتعامل مع فريق الاستشارات.',
+                            'المشاركة الفعالة في ورش العمل والبرامج التدريبية المتفق عليها.',
+                            'سداد المستحقات المالية للطرف الأول في مواعيدها المتفق عليها.'
+                        ]
+                    },
+                    {
+                        title: 'الملكية الفكرية والمخرجات',
+                        text: 'جميع الدراسات والتقارير والمخرجات الاستشارية المنتجة بموجب هذا العقد تُعد ملكية للطرف الثاني بمجرد سداد قيمتها كاملة، ويحتفظ الطرف الأول بحق استخدامها لأغراضه المهنية مع الالتزام بعدم الإفصاح عن البيانات السرية للطرف الثاني.'
+                    },
+                    {
+                        title: 'القيمة المالية وطريقة الدفع',
+                        text: 'قيمة هذا العقد ({price}) ريال سعودي شاملة ضريبة القيمة المضافة، وتُدفع وفق مراحل التنفيذ المتفق عليها، ويتم السداد بالتحويل البنكي وفق البيانات التالية:',
+                        bank: [
+                            'المبلغ الإجمالي: {price} ريال سعودي شاملة الضريبة',
+                            'طريقة الدفع: تحويل بنكي حسب مراحل التنفيذ',
+                            'اسم المستفيد: صالح الناصر',
+                            'رقم الآيبان (IBAN): SAXXXXXXXXXXXXXXXXXXXXXXX',
+                            'البنك: البنك الأهلي السعودي'
+                        ]
+                    },
+                    {
+                        title: 'حل النزاعات',
+                        text: 'في حال حدوث أي خلاف يتعلق بتنفيذ أو تفسير هذا العقد، يسعى الطرفان أولًا إلى حله وديًا خلال مدة أقصاها (30) ثلاثون يومًا، وفي حال تعذر ذلك يُحال النزاع إلى الجهة القضائية المختصة في محافظة جدة بالمملكة العربية السعودية.'
+                    }
+                ]
+            }
+        });
+
+        // ============================================================
+        // 2) أدوات مساعدة عامة (Utils)
+        // ============================================================
+
+        /**
+         * منع XSS: يحوّل أي نص خام قبل إدراجه داخل innerHTML
+         */
+        function escapeHtml(value) {
+            if (value === null || value === undefined) return '';
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        /**
+         * تحويل الأرقام العربية/الهندية إلى أرقام إنجليزية
+         */
+        function toEnglishDigits(str) {
+            if (!str) return str;
+            const eastern = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+            const western = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+            return String(str).replace(/[٠-٩]/g, (d) => western[eastern.indexOf(d)]);
+        }
+
+        /**
+         * تنسيق تاريخ بصيغة YYYY-MM-DD إلى DD/MM/YYYY
+         * يعيد '-' إذا كان التاريخ غير صالح بدل رمي استثناء
+         */
+        function formatDate(isoDate) {
+            if (!isoDate) return '-';
+            const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(isoDate);
+            if (!match) return '-';
+            const [, year, month, day] = match;
+            return `${day}/${month}/${year}`;
+        }
+
+        /**
+         * تنسيق مبلغ مالي بالريال السعودي
+         */
+        function formatPrice(amount) {
+            const numeric = Number(amount);
+            if (Number.isNaN(numeric)) return '-';
+            return `${numeric.toLocaleString('en-US')} ريال سعودي`;
+        }
+
+        /**
+         * استبدال آمن للعناصر النائبة {start} / {end} / {price} داخل نص البند
+         * (يعمل على نص عادي، والـ escaping يتم لاحقًا عند الإدراج في DOM)
+         */
+        function fillPlaceholders(text, {
+            startDate,
+            endDate,
+            price
+        }) {
+            return text
+                .replaceAll('{start}', formatDate(startDate))
+                .replaceAll('{end}', formatDate(endDate))
+                .replaceAll('{price}', formatPrice(price));
+        }
+
+        /**
+         * قراءة عنصر DOM بأمان مع دالة get لتفادي تكرار null-checks
+         */
+        function getInputValue(id) {
+            const el = document.getElementById(id);
+            return el ? el.value.trim() : '';
+        }
+
+        function setElementText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text ?? '-';
+        }
+
+        // ============================================================
+        // 3) حالة التطبيق (State)
+        // ============================================================
+        const wizardState = {
+            selectedTypeId: null
+        };
+
+        // ============================================================
+        // 4) خطوة 1: اختيار نوع العقد
+        // ============================================================
+        function selectContractType(cardEl) {
+            document.querySelectorAll('.type-card').forEach((c) => {
+                c.dataset.state = 'unselected';
+            });
+            cardEl.dataset.state = 'selected';
+
+            const typeId = parseInt(cardEl.dataset.type, 10);
+            wizardState.selectedTypeId = Number.isNaN(typeId) ? null : typeId;
+
+            document.getElementById('typeError').classList.add('hidden');
+        }
+
+        // ============================================================
+        // 5) التحقق من صحة المدخلات (Validation)
+        // ============================================================
+        function validateStepOne() {
+            if (!wizardState.selectedTypeId || !CONTRACT_TYPES[wizardState.selectedTypeId]) {
+                showTypeError();
+                return false;
+            }
+
+            const partyName = getInputValue('party1_name');
+            if (!partyName) {
+                alert('يرجى إدخال اسم المنشأة (الطرف الثاني)');
+                document.getElementById('party1_name').focus();
+                return false;
+            }
+
+            const partyEmail = getInputValue('party1_email');
+            if (!isValidEmail(partyEmail)) {
+                alert('يرجى إدخال بريد إلكتروني صحيح');
+                document.getElementById('party1_email').focus();
+                return false;
+            }
+
+            const startDate = getInputValue('start_date');
+            const endDate = getInputValue('end_date');
+            if (!startDate || !endDate) {
+                alert('يرجى تحديد تاريخ بداية ونهاية العقد');
+                return false;
+            }
+            if (new Date(endDate) <= new Date(startDate)) {
+                alert('يجب أن يكون تاريخ نهاية العقد بعد تاريخ البداية');
+                return false;
+            }
+
+            return true;
+        }
+
+        function isValidEmail(email) {
+            // تحقق بسيط من جهة العميل فقط؛ التحقق الحقيقي يجب أن يتم في الـ backend
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+        function showTypeError() {
+            document.getElementById('typeError').classList.remove('hidden');
+            document.getElementById('contractTypes').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            });
+        }
+
+        // ============================================================
+        // 6) التنقل بين الخطوات
+        // ============================================================
+        function goToStep(step) {
+            if (step === 2 && !validateStepOne()) return;
+
+            document.querySelectorAll('.contract-step').forEach((s) => {
+                s.dataset.state = 'inactive';
+            });
+            document.getElementById(`step${step}`).dataset.state = 'active';
+
+            document.querySelectorAll('.step-dot').forEach((dot, i) => {
+                const idx = i + 1;
+                dot.dataset.state = idx < step ? 'done' : idx === step ? 'active' : 'pending';
+            });
+            document.querySelectorAll('.step-line').forEach((line, i) => {
+                line.dataset.state = i + 1 < step ? 'done' : 'pending';
+            });
+
+            if (step === 2) renderStep('previewClauses', 'pv_');
+            if (step === 3) renderStep('finalClauses', 'fn_');
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // ============================================================
+        // 7) قراءة/عرض بيانات الطرف الثاني (المدخلة من المستخدم)
+        // ============================================================
+        function readPartyTwo() {
+            return {
+                name: getInputValue('party1_name'),
+                email: getInputValue('party1_email')
+            };
+        }
+
+        // ============================================================
+        // 8) بناء بنود العقد (DOM building) — كل نص يمر عبر escapeHtml
+        // ============================================================
+        function buildClauseBodyHtml(clause, dateAndPrice) {
+            let html = '';
+
+            if (clause.text) {
+                const filled = fillPlaceholders(clause.text, dateAndPrice);
+                html += `<p class="whitespace-pre-line text-sm leading-7 text-emerald-800">${escapeHtml(filled)}</p>`;
+            }
+
+            if (clause.list) {
+                const items = clause.list.map((item) => `<li>${escapeHtml(item)}</li>`).join('');
+                html +=
+                    `<ol class="mt-2 list-inside list-decimal space-y-1.5 text-sm leading-7 text-emerald-800">${items}</ol>`;
+            }
+
+            if (clause.subsections) {
+                const blocks = clause.subsections.map((sub) => `
+            <div>
+                <h3 class="text-sm font-extrabold text-emerald-900">${escapeHtml(sub.sub)}</h3>
+                <p class="mt-1 whitespace-pre-line text-sm leading-7 text-emerald-800">${escapeHtml(sub.text)}</p>
+            </div>`).join('');
+                html += `<div class="mt-2 space-y-3">${blocks}</div>`;
+            }
+
+            if (clause.bank) {
+                const rows = clause.bank.map((line) => {
+                    const [label, ...rest] = line.split(': ');
+                    const value = rest.join(': ');
+                    return `
+                <tr>
+                    <td class="w-40 px-4 py-2.5 font-extrabold text-emerald-900">${escapeHtml(label)}</td>
+                    <td class="px-4 py-2.5 font-semibold text-emerald-950" dir="ltr">${escapeHtml(value)}</td>
+                </tr>`;
+                }).join('');
+                html += `
+            <div class="mt-3 overflow-hidden rounded-xl border border-emerald-300 bg-emerald-100/70">
+                <table class="w-full text-right text-sm"><tbody class="divide-y divide-emerald-200">${rows}</tbody></table>
+            </div>`;
+            }
+
+            return html;
+        }
+
+        function buildIntroClauseHtml(introClause) {
+            return `
+        <article class="flex rounded-xl border border-emerald-200 border-r-4 border-r-emerald-700 bg-emerald-50/50 p-4 sm:p-5">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-black leading-tight text-emerald-950">${escapeHtml(introClause.title)}</h2>
+                <p class="mt-2 text-sm leading-7 text-emerald-800">${escapeHtml(introClause.text)}</p>
+            </div>
+        </article>`;
+        }
+
+        function buildNumberedClauseHtml(clause, index, dateAndPrice) {
+            const bodyHtml = buildClauseBodyHtml(clause, dateAndPrice);
+            return `
+        <article class="flex gap-4 rounded-xl border border-emerald-200 border-r-4 border-r-emerald-700 bg-emerald-50/50 p-4 sm:p-5 transition hover:bg-emerald-100/50">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-100 text-sm font-black text-emerald-900 shadow-sm">${index}</span>
+            <div class="min-w-0 flex-1">
+                <h2 class="mb-2 text-lg font-extrabold text-emerald-900">${escapeHtml(clause.title)}</h2>
+                ${bodyHtml}
+            </div>
+        </article>`;
+        }
+
+        function renderClauses(clauses, containerId, dateAndPrice) {
+            const container = document.getElementById(containerId);
+            if (!container || clauses.length === 0) return;
+
+            const [introClause, ...restClauses] = clauses;
+            const html = [
+                buildIntroClauseHtml(introClause),
+                ...restClauses.map((clause, i) => buildNumberedClauseHtml(clause, i + 1, dateAndPrice))
+            ].join('');
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // 9) عرض خطوتي المعاينة والعقد النهائي (منطق مشترك)
+        // ============================================================
+        function renderStep(clausesContainerId, elementPrefix) {
+            const contractType = CONTRACT_TYPES[wizardState.selectedTypeId];
+            if (!contractType) return;
+
+            const startDate = getInputValue('start_date');
+            const endDate = getInputValue('end_date');
+            const contractNumber = getInputValue('contract_number');
+            const partyTwo = readPartyTwo();
+
+            const labelId = elementPrefix === 'pv_' ? 'previewTypeLabel' : 'finalTypeLabel';
+            const numberId = elementPrefix === 'pv_' ? 'previewNumber' : 'finalNumber';
+            const startId = elementPrefix === 'pv_' ? 'previewStart' : 'finalStart';
+            const endId = elementPrefix === 'pv_' ? 'previewEnd' : 'finalEnd';
+
+            setElementText(labelId, contractType.name);
+            setElementText(numberId, contractNumber);
+            setElementText(startId, startDate);
+            setElementText(endId, endDate);
+
+            if (elementPrefix === 'pv_') {
+                setElementText('summaryType', `عقد ${contractType.name}`);
+                setElementText('summaryPrice', formatPrice(contractType.price));
+                setElementText('summaryClauses', `${contractType.clauses.length} بنود`);
+            }
+
+            // بيانات الطرف الثاني المعروضة في بطاقة الملخص (إن وُجدت عناصر لها في الصفحة)
+            setElementText(`${elementPrefix}p2_name`, partyTwo.name);
+            setElementText(`${elementPrefix}p2_email`, partyTwo.email);
+
+            renderClauses(contractType.clauses, clausesContainerId, {
+                startDate,
+                endDate,
+                price: contractType.price
+            });
+        }
+
+        // ============================================================
+        // 10) توقيع العقد
+        //     ملاحظة مهمة: هذا الجزء يجب أن يرسل طلبًا فعليًا إلى الخادم
+        //     (POST مع CSRF token) وينتظر تأكيدًا حقيقيًا قبل إظهار
+        //     "تم التوقيع بنجاح". التنفيذ الحالي (تحديث DOM محليًا فقط)
+        //     غير آمن ولا يعكس حالة حقيقية في قاعدة البيانات.
+        // ============================================================
+        async function signContract() {
+            const termsCheckbox = document.getElementById('termsAccepted');
+            if (!termsCheckbox.checked) {
+                alert('يرجى الموافقة على الشروط والأحكام أولاً');
+                return;
+            }
+
+            const signButton = document.querySelector('[data-action="sign-contract"]');
+            if (signButton) signButton.disabled = true;
+
+            try {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                const response = await fetch('/amrtm/contracts/sign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || ''
+                    },
+                    body: JSON.stringify({
+                        contract_type: wizardState.selectedTypeId,
+                        contract_number: getInputValue('contract_number'),
+                        start_date: getInputValue('start_date'),
+                        end_date: getInputValue('end_date')
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`فشل التوقيع: ${response.status}`);
+                }
+
+                markPartyAsSigned('signP1');
+                markPartyAsSigned('signP2');
+
+                alert('تم توقيع العقد بنجاح! سيتم توجيهك إلى الصفحة الرئيسية.');
+                window.location.href = document.body.dataset.indexUrl || '/';
+            } catch (error) {
+                console.error(error);
+                alert('تعذّر إتمام التوقيع، يرجى المحاولة مرة أخرى.');
+            } finally {
+                if (signButton) signButton.disabled = false;
+            }
+        }
+
+        function markPartyAsSigned(elementId) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.className =
+                'mt-1 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-extrabold text-emerald-900';
+            el.textContent = 'تم التوقيع';
+        }
+
+        // ============================================================
+        // 11) تهيئة حقول التاريخ (تحويل أرقام + تعبئة تلقائية لتاريخ النهاية)
+        // ============================================================
+        function normalizeDateInputDigits(inputEl) {
+            inputEl.addEventListener('input', (e) => {
+                const normalized = toEnglishDigits(e.target.value);
+                if (normalized !== e.target.value) e.target.value = normalized;
+            });
+        }
+
+        function autoFillEndDateOnStartChange(startInput, endInput) {
+            startInput.addEventListener('change', () => {
+                if (!startInput.value) return;
+                const parsed = new Date(`${toEnglishDigits(startInput.value)}T00:00:00`);
+                if (Number.isNaN(parsed.getTime())) return;
+
+                parsed.setFullYear(parsed.getFullYear() + 1);
+                endInput.value = parsed.toISOString().split('T')[0];
+            });
+        }
+
+        function initDateInputs() {
             const startDate = document.getElementById('start_date');
             const endDate = document.getElementById('end_date');
-            const contractType = document.getElementById('contract_type_id');
-            const contractTypeDisplay = document.getElementById('contract_type_display');
-            const tableBody = document.getElementById('attachmentsTableBody');
+            if (!startDate || !endDate) return;
 
-            const toEnglishDigits = (str) => {
-                if (!str) return str;
-                const easternArabic = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '۰', '۱', '۲', '۳',
-                    '۴', '۵', '۶', '۷', '۸', '۹'
-                ];
-                const westernArabic = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '1', '2', '3',
-                    '4', '5', '6', '7', '8', '9'
-                ];
-                return str.replace(/[٠-٩۰-۹]/g, d => westernArabic[easternArabic.indexOf(d)]);
-            };
+            normalizeDateInputDigits(startDate);
+            normalizeDateInputDigits(endDate);
+            autoFillEndDateOnStartChange(startDate, endDate);
+        }
 
-            const updateEndDate = () => {
-                if (!startDate.value) return;
-                const normalizedStart = toEnglishDigits(startDate.value);
-                const date = new Date(normalizedStart + 'T00:00:00');
-                if (!isNaN(date.getTime())) {
-                    date.setFullYear(date.getFullYear() + 1);
-                    endDate.value = date.toISOString().split('T')[0];
-                }
-            };
-
-            startDate.addEventListener('input', (e) => {
-                const val = toEnglishDigits(e.target.value);
-                if (val !== e.target.value) {
-                    e.target.value = val;
-                }
-            });
-
-            endDate.addEventListener('input', (e) => {
-                const val = toEnglishDigits(e.target.value);
-                if (val !== e.target.value) {
-                    e.target.value = val;
-                }
-            });
-
-            const amountValueDisplay = document.querySelector('.amount-value');
-            const updateContractType = () => {
-                const option = contractType.options[contractType.selectedIndex];
-                const rawPrice = Number(option?.dataset.price || 0);
-                if (amountValueDisplay) {
-                    amountValueDisplay.textContent = rawPrice.toLocaleString('en-US', {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2
-                    });
-                }
-                if (contractTypeDisplay && option) {
-                    contractTypeDisplay.textContent = option.text.trim();
-                }
-            };
-            startDate.addEventListener('change', updateEndDate);
-            contractType.addEventListener('change', updateContractType);
-            updateContractType();
-            document.querySelectorAll('.attachment-input').forEach(input => input.addEventListener('change', () => {
-                const file = input.files[0];
-                if (!file) return;
-                document.getElementById('emptyAttachmentsRow')?.remove();
-                input.parentElement.classList.add('border-emerald-700', 'bg-emerald-100/60');
-                const hidden = document.createElement('input');
-                hidden.type = 'hidden';
-                hidden.name = 'attachment_types[]';
-                hidden.value = input.dataset.type;
-                input.parentElement.appendChild(hidden);
-                const row = document.createElement('tr');
-                row.className = 'border-t border-emerald-200 bg-white';
-                row.dataset.type = input.dataset.type;
-                const todayFormatted = new Date().toISOString().split('T')[0];
-                row.innerHTML =
-                    `<td class="px-4 py-3 font-semibold text-emerald-950">${file.name}</td><td class="px-4 py-3 text-emerald-700">${input.parentElement.querySelector('span:nth-child(2)').textContent}</td><td class="en-numbers px-4 py-3 text-emerald-600" dir="ltr">${todayFormatted}</td><td class="en-numbers px-4 py-3 font-bold text-emerald-900" dir="ltr">${(file.size / 1024 / 1024).toFixed(2)} MB</td><td class="px-4 py-3"><button type="button" class="remove-file font-bold text-red-600 hover:text-red-800 transition">حذف</button></td>`;
-                tableBody.appendChild(row);
-                row.querySelector('.remove-file').addEventListener('click', () => {
-                    input.value = '';
-                    hidden.remove();
-                    row.remove();
-                    input.parentElement.classList.remove('border-emerald-700',
-                        'bg-emerald-100/60');
-                    if (!tableBody.children.length) tableBody.innerHTML =
-                        '<tr id="emptyAttachmentsRow"><td colspan="5" class="px-4 py-7 text-center font-semibold text-emerald-600">لا توجد ملفات مرفوعة</td></tr>';
-                });
-            }));
+        // ============================================================
+        // 12) نقطة الدخول
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', () => {
+            initDateInputs();
         });
     </script>
 </body>
