@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: amrtm-app
+    runtime: docker
+    plan: free
+
+    envVars:
+      - key: APP_NAME
+        value: Amrtm
+
+      - key: APP_ENV
+        value: production
+
+      - key: APP_KEY
+        sync: false
+
+      - key: APP_DEBUG
+        value: "false"
+
+      - key: APP_URL
+        value: https://amrtm-app.onrender.com
+
+      - key: LOG_CHANNEL
+        value: stderr
+
+      - key: LOG_LEVEL
+        value: debug
+
+      - key: DB_CONNECTION
+        value: mysql
+
+      - key: DB_HOST
+        value: db66523.public.databaseasp.net
+
+      - key: DB_PORT
+        value: "3306"
+
+      - key: DB_DATABASE
+        value: db66523
+
+      - key: DB_USERNAME
+        value: db66523
+
+      - key: DB_PASSWORD
+        sync: false
+
+      - key: DB_BUSINESS_HOST
+        value: db66523.public.databaseasp.net
+
+      - key: DB_BUSINESS_PORT
+        value: "3306"
+
+      - key: DB_BUSINESS_DATABASE
+        value: db66523
+
+      - key: DB_BUSINESS_USERNAME
+        value: db66523
+
+      - key: DB_BUSINESS_PASSWORD
+        sync: false

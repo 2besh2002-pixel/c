@@ -1,10 +1,7 @@
-# Multi-stage build for Laravel on Wasmer / Container Deploy
 FROM php:8.2-cli-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies & PHP extensions
 RUN apk add --no-cache \
     curl \
     libpng-dev \
@@ -14,22 +11,32 @@ RUN apk add --no-cache \
     zip \
     unzip \
     git \
-    && docker-php-ext-install pdo pdo_mysql mbstring xml bcmath opcache fileinfo gd zip
+    && docker-php-ext-install \
+        pdo \
+        pdo_mysql \
+        mbstring \
+        xml \
+        bcmath \
+        opcache \
+        fileinfo \
+        gd \
+        zip
 
-# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy application files
 COPY . /app
 
-# Install PHP dependencies without dev packages for production
-RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
+RUN composer install \
+    --no-dev \
+    --optimize-autoloader \
+    --no-interaction \
+    --ignore-platform-reqs
 
-# Prepare Laravel storage permissions and caching
-RUN chmod -R 777 storage bootstrap/cache && chmod +x /app/docker-entrypoint.sh && php artisan storage:link || true
+RUN chmod -R 777 storage bootstrap/cache \
+    && chmod +x /app/docker-entrypoint.sh
 
-# Expose ports
-EXPOSE 8080 10000
+RUN php artisan storage:link || true
 
-# Start Laravel with dynamic port support for Render / Cloud deploy
+EXPOSE 8080
+
 CMD ["/app/docker-entrypoint.sh"]
